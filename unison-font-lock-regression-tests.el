@@ -224,6 +224,8 @@ When C-u prefix, or when FORCE is non-nil, only regenerate missing files."
 ;; Testing
 ;;
 
+;; Interactive
+
 (defun font-lock-regression-suite-list ()
   "Echo all source files in the regression suite."
   (interactive)
@@ -233,6 +235,12 @@ When C-u prefix, or when FORCE is non-nil, only regenerate missing files."
        (princ (format "%s:\n  %s\n  %s\n  %s\n" name src-file ref-file mode))))
     (display-buffer (current-buffer))))
 
+;; Batch
+
+(ert-deftest regression-tests ()
+  (font-lock-regression-suite-each-src-ref-file
+   (lambda (name src-file ref-file mode)
+     (princ (format "%s:\n  %s\n  %s\n  %s\n" name src-file ref-file mode)))))
 
 ;; ----------------------------------------------------------------------
 ;; The End
