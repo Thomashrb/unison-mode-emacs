@@ -3,7 +3,7 @@ foo = 3
 
 bar = 2
 
-ability Stream e where
+structural ability Stream e where
   emit : e -> ()
 
 function1' : Nat -> Nat
@@ -24,26 +24,24 @@ function3 _ = !(_ -> ())
 function4 : () -> ()
 function4 _ = ()
 
-namespace Foo.Bar where
+structural type Hello a = Hello a
+unique type Hallo a = Hallo a
 
-  type Hello a = Hello a
-  unique type Hallo a = Hallo a
+structural ability Foo.Bar.Stream e where
+  emit : e -> ()
 
-  ability Stremo e where
-    emito : e -> ()
+Foo.Bar.function2 : Nat  -> Nat
+Foo.Bar.function2 x = x
 
-  function2 : Nat  -> Nat
-  function2 x = x
+Foo.Bar.function3 : a -> a
+Foo.Bar.function3 x = x
 
-  function3 : a -> a
-  function3 x = x
+Foo.Bar.function4 : 'a -> Nat
+Foo.Bar.function4 _ = 3
 
-  function4 : 'a -> Nat
-  function4 _ = 3
+structural type Optional a = None | Some a
 
-type Optional a = None | Some a
-
-use .base
+use base
 
 use Bar
 
@@ -76,6 +74,10 @@ Stream.terminated s _ =
 
 Stream.sum' = Stream.foldLeft (Nat.+) 0
 
+{{
+  some documentation about ``Stream.pipe``
+  documentation can be given here directly instead of using x.doc
+}}
 Stream.pipe : '{Stream a} () -> '{Ask a, Stream b} r -> '{Stream b} ()
 Stream.pipe s f _ =
   h s = cases
@@ -97,11 +99,16 @@ Stream.filter f s =
     else !go
   Stream.pipe s go
 
-Stream.filter.doc = [:
+Stream.filter.doc : Doc
+Stream.filter.doc = {{
 Multiline
 
-documentation
-:]
+documentation litteral
+}}
+
+Stream.filter.docDeprecated : Doc.Deprecated
+Stream.filter.docDeprecated =
+  [: Some text in deprecated doc syntax :]
 
 ---
 

@@ -36,7 +36,10 @@
     (modify-syntax-entry ?- ". 12" table)
     ;; \n is a comment ender
     (modify-syntax-entry ?\n ">" table)
-    ;; [: :] for docs
+    ;; {{ }} is doc start and end
+    (modify-syntax-entry ?\{ ". 12" table)
+    (modify-syntax-entry ?\} ". 34" table)
+    ;; [: :] for docs - DEPRECATED
     (modify-syntax-entry ?\[ ". 1" table)
     (modify-syntax-entry ?: ". 23b" table)
     (modify-syntax-entry ?\] ". 4" table)
@@ -58,11 +61,14 @@
              ;; Handle the unison fold
              (x-fold-regexp "---\\(\n\\|.\\)*")
 
-             ;; define several categories of keywords
+             ;; Handle multiline comments delimited by {{ }}
+             (x-mulline-comment "\\({{[^{]*}}\\)")
+
+             ;; DEFINE several categories of keywords
              ;; symbol keywords
              (x-symbol-keywords '(":" "->"))
              ;; standard alphabetical keywords
-             (x-keywords '("if" "then" "else" "forall" "handle" "unique" "where" "use" "and" "or" "true" "false" "type" "ability" "alias" "let" "namespace" "cases" "match" "with"))
+             (x-keywords '("if" "then" "else" "forall" "handle" "unique" "structural" "where" "use" "and" "or" "true" "false" "type" "ability" "alias" "let" "cases" "match" "with"))
 
              ;; generate regex strings for each keyword category
              (x-keywords-regexp (regexp-opt x-keywords 'words))
@@ -75,11 +81,9 @@
              ;; single quote or exclamation point when it's not part of an identifier
              (x-single-quote-exc-regexp "\\(\s\\)\\(!\\|'\\)")
 
-             ;; Signautres
+             ;; Signatures
              (x-sig-regexp (concat "^\s*?\\(" namespaced-regexp "\\).+?[:=]"))
 
-             ;; Namespaces definition
-             (x-namespace-def-regexp (concat "namespace\s+\\(" namespaced-regexp "\\)\s+where"))
              ;; Namespaces import
              (x-namespace-import-regexp (concat "use\s+\\(" namespaced-regexp "\\)"))
 
@@ -96,11 +100,11 @@
 
         `(
           (,x-fold-regexp . (0 font-lock-comment-face t))
+          (,x-mulline-comment . (0 font-lock-comment-face t))
           (,x-keywords-full-regexp . font-lock-keyword-face)
           (,x-single-quote-exc-regexp . (2 font-lock-keyword-face))
           (,x-request-regexp . font-lock-preprocessor-face)
           (,x-sig-regexp . (1 font-lock-function-name-face))
-          (,x-namespace-def-regexp . (1 font-lock-constant-face))
           (,x-namespace-import-regexp . (1 font-lock-constant-face))
           (,x-ability-def-regexp . (1 font-lock-variable-name-face))
           (,x-ability-regexp . (1 font-lock-variable-name-face))
