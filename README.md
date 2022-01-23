@@ -13,6 +13,15 @@ Very simple Unison syntax highlighting for Emacs
 | unisonlang-mode-add-fold | C-c C-f | Adds a fold above the cursor |
 | unisonlang-mode-remove-fold | C-c C-d | Removes the fold above the cursor |
 
+## Install
+
+```elisp
+(use-package unisonlang-mode
+  :straight (unisonlang-mode :type git :host github :repo "thomashrb/unison-mode-emacs")
+  :config
+  (add-hook 'after-init-hook #'auto-revert-mode)
+  :mode (("\\.u\\'" . unisonlang-mode)))
+```
 
 ## Development
 
